@@ -20,6 +20,14 @@ class Bakery(db.Model, SerializerMixin):
 
     baked_goods = db.relationship('BakedGood', backref='bakery')
 
+    def to_dict(self, nested=False):
+        result = super(Bakery, self).to_dict()
+        if nested:
+            # Assuming you want to include baked_goods in the serialization
+            result['baked_goods'] = [bg.to_dict() for bg in self.baked_goods]
+        return result
+
+
     def __repr__(self):
         return f'<Bakery {self.name}>'
 
